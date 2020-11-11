@@ -29,16 +29,16 @@ public class JCalcFrame extends JFrame implements ActionListener
   JButton calcButton = new JButton("Calculate");
   
   JButton exitButton = new JButton("Exit");
+
   JButton reset = new JButton("Reset");
 
   JLabel result = new JLabel("Your monthly payment is: ");
   JLabel sum = new JLabel("  ");
 
-  JTextArea textArea = new JTextArea(10, 35);
-
+  JTextArea textArea = new JTextArea(10, 20);
   JScrollPane displayScroll = new JScrollPane(textArea,
     JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-    JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
 
   //creates the general look of the UI
   public JCalcFrame()
@@ -123,13 +123,14 @@ public class JCalcFrame extends JFrame implements ActionListener
     sum.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 22));
     col6.add(sum);
 
+    row3.setBorder(BorderFactory.createEmptyBorder(20,0,0,0));
     outer.add(row3);
     row3.add(calcButton);
     row3.add(reset);  
     row3.add(exitButton);
 
     outer.add(row4);
-    row4.add(textArea);
+    row4.add(displayScroll);
 
     calcButton.addActionListener(this);
     exitButton.addActionListener(this);
@@ -163,11 +164,14 @@ public class JCalcFrame extends JFrame implements ActionListener
           output = "Invalid values. Try again";
         }
         sum.setText(output);
-        double balance = n1 - monthlyPayment;
+        double balance = n1 + (n1*n2);
         StringBuffer sb = new StringBuffer();
+        String header = String.format("%10s %30s %30s\n", "Month", "Montly Payment ($)", "Remaining Balance ($)");
+        sb.append(header);
+        sb.append("\n");
 
         for (int i = 1; i < n3; i++) {
-          monthlyPayment -= balance;
+          balance -= monthlyPayment;
           String text = String.format("%10d %30.2f %40.2f\n", i, monthlyPayment, balance);
           sb.append(text);
         }
