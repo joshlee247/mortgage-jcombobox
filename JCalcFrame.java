@@ -23,7 +23,7 @@ public class JCalcFrame extends JFrame implements ActionListener
   double Rate[] = {5.35, 5.50, 5.75};
   int Term[] = {7, 15, 30};
 
-  String Dropdown[] = {"7 years at 5.35%", "15 years at 5.50%", "30 years at 5.75%" };
+  String Dropdown[] = {"7 years at 5.35%", "15 years at 5.50%", "30 years at 5.75%"};
   JComboBox dropdown = new JComboBox(Dropdown);
 
   JButton calcButton = new JButton("Calculate");
@@ -31,8 +31,14 @@ public class JCalcFrame extends JFrame implements ActionListener
   JButton exitButton = new JButton("Exit");
   JButton reset = new JButton("Reset");
 
-  JLabel result = new JLabel("The total is: ");
+  JLabel result = new JLabel("Your monthly payment is: ");
   JLabel sum = new JLabel("  ");
+
+  JTextArea textArea = new JTextArea(10, 35);
+
+  JScrollPane displayScroll = new JScrollPane(textArea,
+    JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+    JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
   //creates the general look of the UI
   public JCalcFrame()
@@ -111,18 +117,19 @@ public class JCalcFrame extends JFrame implements ActionListener
     
     //adds spacing and calcButton
     sum.setBorder(BorderFactory.createEmptyBorder(0,0,20,0));
-    row3.add(calcButton);
 
     //displays total monthly Mortgage
     col6.add(result);
     sum.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 22));
     col6.add(sum);
 
-    //displays exit and reset button
     outer.add(row3);
+    row3.add(calcButton);
+    row3.add(reset);  
+    row3.add(exitButton);
+
     outer.add(row4);
-    row4.add(exitButton);
-    row4.add(reset);  
+    row4.add(textArea);
 
     calcButton.addActionListener(this);
     exitButton.addActionListener(this);
@@ -147,27 +154,35 @@ public class JCalcFrame extends JFrame implements ActionListener
         //calculates Farenheit to Celsius
         n2 = n2/1200;
         n3 = n3*12;
-        double total = (n1 * n2) / (1 - Math.pow(1+n2,-n3));
+        double monthlyPayment = (n1 * n2) / (1 - Math.pow(1+n2,-n3));
  
         //converts total to string
-        String output = "$" + df.format(total);
+        String output = "$" + df.format(monthlyPayment);
 
         if((n1 < 0) || (n2 < 0) || (n3 < 0)) {
           output = "Invalid values. Try again";
         }
         sum.setText(output);
+        double balance = n1 - monthlyPayment;
+        StringBuffer sb = new StringBuffer();
+
+        for (int i = 1; i < n3; i++) {
+          monthlyPayment -= balance;
+          String text = String.format("%10d %30.2f %40.2f\n", i, monthlyPayment, balance);
+          sb.append(text);
+        }
+        textArea.setText(sb.toString());
       }
-      else
-      if(source == reset)
+      else if(source == reset)
       {
         sum.setText("");
         userP.setText("");
       }
       else
-          {
-            // if the user clicks on the Exit button (source is Exit button)
-            System.exit(0);
-          }
+      {
+        // if the user clicks on the Exit button (source is Exit button)
+        System.exit(0);
+      }
    }// end actionPerformed
 }// end JCalcFrame
 

@@ -20,7 +20,7 @@ import java.awt.event.*;
       cFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
       //sets size of cFrame window
-      cFrame.setSize(600,300);
+      cFrame.setSize(600,1000);
 
       //aligns all components to center
       //cFrame.setLayout(new FlowLayout(FlowLayout.LEFT, 3, 10));
