@@ -43,17 +43,14 @@ public class JCalcFrame extends JFrame implements ActionListener
   //creates the general look of the UI
   public JCalcFrame()
   {
+    //creates a container with boxes inside for easy organization and spacing
     Container con = getContentPane();
     Box outer = Box.createVerticalBox();
-    // Title
     Box row0 = Box.createHorizontalBox();
-    // Entry Fields
     Box row1 = Box.createHorizontalBox();
     Box col1 = Box.createVerticalBox();
     Box col2 = Box.createVerticalBox();
     Box col3 = Box.createVerticalBox();
-
-    // Total
     Box row2 = Box.createHorizontalBox();
     Box col4 = Box.createVerticalBox();
     Box col5 = Box.createVerticalBox();
@@ -83,6 +80,7 @@ public class JCalcFrame extends JFrame implements ActionListener
     row1.add(col3);
 
     //margin spacing
+    //(top, left, bottom, right)
     col1.setBorder(BorderFactory.createEmptyBorder(0,0,0,10));
     col2.setBorder(BorderFactory.createEmptyBorder(0,0,0,10));
     
@@ -123,12 +121,14 @@ public class JCalcFrame extends JFrame implements ActionListener
     sum.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 22));
     col6.add(sum);
 
+    //assigns calcButton, reset, and exit to its own row
     row3.setBorder(BorderFactory.createEmptyBorder(0,0,20,0));
     outer.add(row3);
     row3.add(calcButton);
     row3.add(reset);  
     row3.add(exitButton);
 
+    //adds displayScroll
     outer.add(row4);
     row4.add(displayScroll);
 
@@ -148,6 +148,7 @@ public class JCalcFrame extends JFrame implements ActionListener
         int index = dropdown.getSelectedIndex();
         String num1 = userP.getText();
 
+        //gets variables as strings from inputs and converts to double/int
         double n1 = Double.parseDouble(num1);
         double n2 = Rate[index];
         int n3 = Term[index];
@@ -164,23 +165,28 @@ public class JCalcFrame extends JFrame implements ActionListener
         if((n1 < 0) || (n2 < 0) || (n3 < 0)) {
           output = "Invalid values. Try again";
         }
+        //outputs monthly payment
         sum.setText(output);
-        double balance = n1 + (n1*n2);
+
+        double balance = monthlyPayment * n3;
+        //string buffer to append to *after* calculate button is clicked
         StringBuffer sb = new StringBuffer();
+
+        //appends heading titles at the top of the JTextArea
         String header = String.format("%10s %30s %30s\n", "Month", "Montly Payment ($)", "Remaining Balance ($)");
         sb.append(header);
         sb.append("\n");
 
+        //loop to output month, monthlyPayment, and remaining balance
         for (int i = 1; i < n3; i++) {
           balance -= monthlyPayment;
-          if ((balance - monthlyPayment) < 0) {
-            balance = 0.00;
-          }
           String text = String.format("%10d %30.2f %40.2f\n", i, monthlyPayment, balance);
           sb.append(text);
         }
+        //outputs all text to the JTextArea
         textArea.setText(sb.toString());
       }
+      //reset button
       else if(source == reset)
       {
         sum.setText("");
