@@ -35,7 +35,7 @@ public class JCalcFrame extends JFrame implements ActionListener
   JLabel result = new JLabel("Your monthly payment is: ");
   JLabel sum = new JLabel("  ");
 
-  JTextArea textArea = new JTextArea(10, 20);
+  JTextArea textArea = new JTextArea(15, 40);
   JScrollPane displayScroll = new JScrollPane(textArea,
     JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
     JScrollPane.HORIZONTAL_SCROLLBAR_ALWAYS);
@@ -123,7 +123,7 @@ public class JCalcFrame extends JFrame implements ActionListener
     sum.setFont(new Font(Font.SANS_SERIF, Font.PLAIN, 22));
     col6.add(sum);
 
-    row3.setBorder(BorderFactory.createEmptyBorder(20,0,0,0));
+    row3.setBorder(BorderFactory.createEmptyBorder(0,0,20,0));
     outer.add(row3);
     row3.add(calcButton);
     row3.add(reset);  
@@ -152,7 +152,8 @@ public class JCalcFrame extends JFrame implements ActionListener
         double n2 = Rate[index];
         int n3 = Term[index];
 
-        //calculates Farenheit to Celsius
+        //calculates monthly payment due
+        //n1 = principal, n2 = rate, n3 = term
         n2 = n2/1200;
         n3 = n3*12;
         double monthlyPayment = (n1 * n2) / (1 - Math.pow(1+n2,-n3));
@@ -172,6 +173,9 @@ public class JCalcFrame extends JFrame implements ActionListener
 
         for (int i = 1; i < n3; i++) {
           balance -= monthlyPayment;
+          if ((balance - monthlyPayment) < 0) {
+            balance = 0.00;
+          }
           String text = String.format("%10d %30.2f %40.2f\n", i, monthlyPayment, balance);
           sb.append(text);
         }
