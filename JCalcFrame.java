@@ -173,14 +173,19 @@ public class JCalcFrame extends JFrame implements ActionListener
         StringBuffer sb = new StringBuffer();
 
         //appends heading titles at the top of the JTextArea
-        String header = String.format("%10s %30s %30s\n", "Month", "Montly Payment ($)", "Remaining Balance ($)");
+        String header = String.format("%10s %30s %30s\n", "Month", "Interest Paid ($)", "Remaining Balance ($)");
         sb.append(header);
         sb.append("\n");
 
         //loop to output month, monthlyPayment, and remaining balance
-        for (int i = 1; i < n3; i++) {
-          balance -= monthlyPayment;
-          String text = String.format("%10d %30.2f %40.2f\n", i, monthlyPayment, balance);
+        double paidInterest = 0.0;
+        for (int i = 1; i <= n3; i++) {
+          paidInterest = n1 * n2;
+          n1 = n1 - (monthlyPayment - paidInterest);
+          if (n1 <= 0) {
+            n1 = 0;
+          }
+          String text = String.format("%10d %30.2f %40.2f\n", i, paidInterest, n1);
           sb.append(text);
         }
         //outputs all text to the JTextArea
@@ -191,6 +196,7 @@ public class JCalcFrame extends JFrame implements ActionListener
       {
         sum.setText("");
         userP.setText("");
+        textArea.setText("");
       }
       else
       {
@@ -199,4 +205,3 @@ public class JCalcFrame extends JFrame implements ActionListener
       }
    }// end actionPerformed
 }// end JCalcFrame
-
